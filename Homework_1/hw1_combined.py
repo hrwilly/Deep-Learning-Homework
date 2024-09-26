@@ -40,26 +40,27 @@ def compute_ls(S, K, r, dt, n, itm_only=False):
             in_the_money = Payoff_Xt > 0
             if np.sum(in_the_money) == 0:
                 continue
-            V_hat = least_squares_regression(S[in_the_money, t], V[in_the_money] * np.exp(-r * dt))
-            V[in_the_money] = np.maximum(Payoff_Xt[in_the_money], V_hat)
+            V_hat = least_squares_regression(S[in_the_money, t], V[in_the_money])
+            V[in_the_money] = np.where(Payoff_Xt[in_the_money] - V_hat * np.exp(-r * dt) > 0, Payoff_Xt[in_the_money], V[in_the_money] * np.exp(-r * dt))  
         else:
-            V_hat = least_squares_regression(S[:, t], V * np.exp(-r * dt))
-            V = np.maximum(Payoff_Xt, V_hat)
+            V_hat = least_squares_regression(S[:, t], V)  
+            V = np.where(Payoff_Xt - V_hat * np.exp(-r * dt) > 0, Payoff_Xt, V * np.exp(-r * dt))          
 
-    return np.mean(V)
+    return np.mean(np.maximum(V, Payoff_Xt))
 
 # Calculate V0 using TvR method
 def compute_tvr(S, K, r, dt, n):
+    
     Payoff_T = np.maximum(K - S[:, -1], 0)
     V = Payoff_T.copy()
 
     # from T to 0
     for t in range(n - 1, -1, -1):
         Payoff_Xt = np.maximum(K - S[:, t], 0)
-        V_hat = np.exp(-r * dt) * np.mean(V)
-        V = np.maximum(Payoff_Xt, V_hat)
+        V_hat = least_squares_regression(S[:, t], V)
+        V = np.maximum(Payoff_Xt, V_hat * np.exp(-r * dt))
 
-    return np.mean(V)
+    return np.mean(np.maximum(V, Payoff_Xt))
 
 def main():
     # a. one-step 

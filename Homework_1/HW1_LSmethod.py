@@ -73,7 +73,8 @@ for t in range(n - 1, -1, -1):
     V_hat = X_polynomials @ beta_hat
     Payoff_Xt = np.maximum(K - S[:, t], 0)
     V = np.maximum(Payoff_Xt, V_hat)
-
+print(Payoff_Xt)
+print(V_hat)
 V0_b = np.mean(V)
 print(f"For multi-step version using LS method, the option value is: {V0_b:.4f}")
 
