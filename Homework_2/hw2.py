@@ -291,14 +291,16 @@ print("""
 Despite the training sets being identical in both datasets, the distribution of features or noise in the validation sets could have led to differences in generalization performance. The validation set in data2.csv performs best with lower-degree polynomial models, while higher-degree models quickly lead to increased validation errors. This suggests that the validation set in data2.csv is more sensitive to model complexity, where overly complex models decrease generalization capability rather than improving it.
 """)
 
+# d.
 bandwidth = np.linspace(0.01, 5, 150)
 tau1, mse1 = weighted_least_squares('data1.csv', bandwidth)
-print('The minimum mean squared error occurs at tau = ' + str(round(tau1[0], 3)) + ' at a value of mse = ' + str(round(mse1, 3)))
+print('(d). For data1, the minimum mean squared error occurs at tau = ' + str(round(tau1[0], 3)) + ' at a value of mse = ' + str(round(mse1, 3)))
 
+# e.
 tau2, mse2 = weighted_least_squares('data2.csv', bandwidth)
-print('The minimum mean squared error occurs at tau = ' + str(round(tau2[0], 3)) + ' at a value of mse = ' + str(round(mse2, 3)))
+print('(e). For data2, the minimum mean squared error occurs at tau = ' + str(round(tau2[0], 3)) + ' at a value of mse = ' + str(round(mse2, 3)))
 
 print("""
-Between data1 and data2, the mean squared error increases faster as the bandwidth increases for data2. Data2 also has a smaller optimal bandwidth than data1, but this minimum occurs at a higher mean squared error than the minimum for data1.
+Between data1 and data2, the mean squared error increases faster as the bandwidth increases for data2. Data2 also has a smaller optimal bandwidth than data1, but this minimum occurs at a higher mean squared error than the minimum for data1. In parts (d)(e), the resulting plot for bandwidth vs MSE have roughly the same shape, which is not true for (a)(b) as at high p, the MSE for only data2 blows up to infinity. Data1 appears to start leveling off at high p. In the case of parts (d)(e), the MSE blows up to infinity at bandwidth = 0 for both data1 and data2.
 """)
 
